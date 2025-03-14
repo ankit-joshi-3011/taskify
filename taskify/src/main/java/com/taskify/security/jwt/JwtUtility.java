@@ -36,6 +36,10 @@ public class JwtUtility {
 		return extractClaim(jwt, Claims::getSubject);
 	}
 
+	public boolean validateToken(String jwt) throws JwtException, IllegalArgumentException, InvalidKeySpecException, NoSuchAlgorithmException {
+		return extractClaim(jwt, Claims::getExpiration).before(new Date());
+	}
+
 	private <T> T extractClaim(String jwt, Function<Claims, T> claimsResolver) throws JwtException, IllegalArgumentException, InvalidKeySpecException, NoSuchAlgorithmException {
 		Claims claims = extractAllClaims(jwt);
 		return claimsResolver.apply(claims);
