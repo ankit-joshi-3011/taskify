@@ -15,5 +15,6 @@ spring:
     show-sql: true
 
 jwt:
-  secret-key: ${TASKIFY_JWT_SECRET_KEY}
+  signature-private-key: ${TASKIFY_JWT_SIGNATURE_PRIVATE_KEY}
+  signature-public-key: ${TASKIFY_JWT_SIGNATURE_PUBLIC_KEY}
   expiration: ${TASKIFY_JWT_EXPIRATION_TIME_MILLISECONDS}
