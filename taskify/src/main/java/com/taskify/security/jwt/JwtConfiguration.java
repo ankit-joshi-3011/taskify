@@ -9,6 +9,7 @@ import lombok.Getter;
 @ConfigurationProperties(prefix = "jwt")
 @Getter
 public class JwtConfiguration {
-	private String secretKey;
+	private String signaturePrivateKey;
+	private String signaturePublicKey;
 	private long expiration;
 }
