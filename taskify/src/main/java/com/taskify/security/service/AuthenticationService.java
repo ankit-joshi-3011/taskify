@@ -28,11 +28,11 @@ public class AuthenticationService implements IAuthenticationService {
 		if (user.isEmpty()) {
 			throw new UserNotFoundException("Invalid username or password");
 		}
-		
+
 		if (!passwordEncoder.matches(password, user.get().getPassword())) {
 			throw new InvalidPasswordException("Invalid username or password");
 		}
-		
+
 		try {
 			return jwtUtility.generateToken(username);
 		} catch (Exception e) {
