@@ -6,6 +6,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 import org.springframework.stereotype.Component;
@@ -18,15 +19,12 @@ public class JwtKeyPairProvider {
 	private JwtConfiguration jwtConfiguration;
 
 	public PrivateKey getPrivateKey() throws InvalidKeySpecException, NoSuchAlgorithmException {
-		return KeyFactory.getInstance("RSA").generatePrivate(getKeySpec(jwtConfiguration.getSignaturePrivateKey()));
+		byte[] keyBytes = Base64.getDecoder().decode(jwtConfiguration.getSignaturePrivateKey());
+		return KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(keyBytes));
 	}
 
 	public PublicKey getPublicKey() throws InvalidKeySpecException, NoSuchAlgorithmException {
-		return KeyFactory.getInstance("RSA").generatePublic(getKeySpec(jwtConfiguration.getSignaturePublicKey()));
-	}
-
-	private PKCS8EncodedKeySpec getKeySpec(String key) {
-		byte[] keyBytes = Base64.getDecoder().decode(key);
-		return new PKCS8EncodedKeySpec(keyBytes);
+		byte[] keyBytes = Base64.getDecoder().decode(jwtConfiguration.getSignaturePublicKey());
+		return KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(keyBytes));
 	}
 }
