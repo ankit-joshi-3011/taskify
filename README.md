@@ -23,20 +23,36 @@
     * Make sure that the Enable project specific settings, Enable annotation processing, and Enable processing in editor are all checked
     * Apply the changes which should trigger a recompile of the project
     * Once the project is recompiled, Lombok should start generating the required code correctly
-5. Generate the secret key that will be used to sign the JSON Web Token (JWT) by running the following piece of Java code in any online compiler:
+5. Generate the public/private key-pair that will be used to validate/sign the JSON Web Token (JWT) by running the following piece of Java code in any online compiler:
 ```
-import java.security.SecureRandom;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.Base64;
 
-public class JwtSecretKeyGenerator {
-    public static void main(String[] args) {
-        byte[] key = new byte[32]; // 256-bit key for HS256
-        new SecureRandom().nextBytes(key);
-        String encodedKey = Base64.getEncoder().encodeToString(key);
-        System.out.println("Generated JWT Secret Key: " + encodedKey);
+public class RSAKeyGenerator {
+    public static void main(String[] args) throws Exception {
+        // Generate RSA Key Pair
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        keyPairGenerator.initialize(2048); // Use 2048 or 4096 for security
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+        // Extract Private and Public Keys
+        PrivateKey privateKey = keyPair.getPrivate();
+        PublicKey publicKey = keyPair.getPublic();
+
+        // Encode in Base64
+        String privateKeyBase64 = Base64.getEncoder().encodeToString(privateKey.getEncoded());
+        String publicKeyBase64 = Base64.getEncoder().encodeToString(publicKey.getEncoded());
+
+        // Print keys
+        System.out.println("Private Key:\n" + privateKeyBase64);
+        System.out.println("\nPublic Key:\n" + publicKeyBase64);
     }
 }
 ```
 6. Define the following System Environment Variables to ensure that JWT-based authentication works successfully in the application:
-    * TASKIFY_JWT_SECRET_KEY - The secret key generated in step 5 above
+    * TASKIFY_JWT_SIGNATURE_PRIVATE_KEY - The private key generated in step 5 above that will be used to sign the JWT
+    * TASKIFY_JWT_SIGNATURE_PUBLIC_KEY - The public key generated in step 5 above that will be used to validate the JWT
     * TASKIFY_JWT_EXPIRATION_TIME_MILLISECONDS - After what amount of time beginning from the time of JWT generation do we want the JWT to expire (in milliseconds)
