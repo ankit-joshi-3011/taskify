@@ -13,3 +13,7 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+jwt:
+  secret-key: ${TASKIFY_JWT_SECRET_KEY}
+  expiration: ${TASKIFY_JWT_EXPIRATION_TIME_MILLISECONDS}
