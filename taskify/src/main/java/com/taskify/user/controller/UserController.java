@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.taskify.entity.User;
-import com.taskify.user.service.UserService;
+import com.taskify.user.service.IUserService;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-	private UserService userService;
+	private IUserService userService;
 
-	public UserController(UserService userService) {
+	public UserController(IUserService userService) {
 		this.userService = userService;
 	}
 
