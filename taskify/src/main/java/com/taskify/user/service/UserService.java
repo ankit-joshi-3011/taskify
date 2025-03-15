@@ -7,7 +7,7 @@ import com.taskify.entity.User;
 import com.taskify.user.repository.UserRepository;
 
 @Service
-public class UserService {
+public class UserService implements IUserService {
 	private UserRepository userRepository;
 	private PasswordEncoder passwordEncoder;
 
@@ -16,6 +16,7 @@ public class UserService {
 		this.passwordEncoder = passwordEncoder;
 	}
 
+	@Override
 	public User save(User user) {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 
